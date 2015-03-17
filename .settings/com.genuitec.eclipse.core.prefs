@@ -1,0 +1,4 @@
+#Fri Jan 16 15:37:14 CST 2015
+eclipse.preferences.version=1
+validator.Checked=WebRoot/js/jquery.inputmask.min.js,WebRoot/js/jquery.tagsinput.min.js
+validator.Unchecked=

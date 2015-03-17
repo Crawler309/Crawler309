@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+
+	<bean id="dataSource1" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver">
+		</property>
+		<property name="url"
+			value="jdbc:mysql://192.168.1.106:3306/crawler309?useUnicode=true&amp;characterEncoding=UTF-8">
+		</property>
+		<property name="username" value="root"></property>
+
+
+	</bean>
+
+
+	<bean id="dataSource2" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver">
+		</property>
+		<property name="url" value="jdbc:mysql://192.168.1.106:3306/lucenemanage">
+		</property>
+		<property name="username" value="root"></property>
+	</bean>
+
+
+
+
+
+	<bean id="sessionFactory1"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource1" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+			</props>
+		</property>
+		<property name="mappingResources">
+			<list>
+				<value>
+					org/zjicm/crawler/vo/AdministratorUser.hbm.xml
+				</value>
+				<value>org/zjicm/crawler/vo/Webcontinfo.hbm.xml</value>
+				<value>org/zjicm/crawler/vo/Taskinfo.hbm.xml</value>
+				<value>org/zjicm/crawler/vo/Filterurl.hbm.xml</value>
+				<value>org/zjicm/crawler/vo/Unvisitedurl.hbm.xml</value>
+				<value>
+					org/zjicm/crawler/vo/Gatherwebsite.hbm.xml
+				</value>
+				<value>org/zjicm/crawler/vo/Visitedurl.hbm.xml</value>
+
+			</list>
+		</property>
+
+	</bean>
+
+
+
+
+
+
+
+
+
+
+
+	<bean id="sessionFactory2"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource2" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+			</props>
+		</property>
+		<property name="mappingResources">
+			<list>
+				<value>
+					org/zjicm/lucene/vo/Keywords.hbm.xml
+				</value>
+				<value>
+					org/zjicm/lucene/vo/LuceneInfo.hbm.xml</value>
+
+			</list>
+		</property>
+	</bean>
+
+
+
+
+
+
+
+	<bean id="baseDAO1" class="org.zjicm.crawler.dao.BaseDAO"
+		abstract="true">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory1" />
+		</property>
+	</bean>
+
+	<bean id="baseDAO2" class="org.zjicm.crawler.dao.BaseDAO"
+		abstract="true">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory2" />
+		</property>
+	</bean>
+
+
+	<bean id="webContInfoDao" class="org.zjicm.crawler.dao.impl.WebContInfoDao"
+		parent="baseDAO1">
+	</bean>
+
+	<bean id="webContInfoService" class="org.zjicm.crawler.service.impl.WebContInfoService">
+		<property name="webContInfoDao">
+			<ref bean="webContInfoDao" />
+		</property>
+	</bean>
+
+
+	<bean id="webContInfoAction" class="org.zjicm.crawler.action.WebContInfoAction">
+		<property name="webContInfoService">
+			<ref bean="webContInfoService" />
+		</property>
+	</bean>
+
+
+
+	<bean id="unVisitedUrlDao" class="org.zjicm.crawler.dao.impl.UnvisitedUrlDao"
+		parent="baseDAO1">
+	</bean>
+
+	<bean id="unVisitedUrlService" class="org.zjicm.crawler.service.impl.UnVisitedUrlService">
+		<property name="unVisitedUrlDao">
+			<ref bean="unVisitedUrlDao" />
+		</property>
+	</bean>
+
+
+	<bean id="unVisitedUrlAction" class="org.zjicm.crawler.action.UnVisitedUrlAction">
+		<property name="unVisitedUrlService">
+			<ref bean="unVisitedUrlService" />
+		</property>
+	</bean>
+
+	<bean id="visitedUrlDao" class="org.zjicm.crawler.dao.impl.VisitedUrlDao"
+		parent="baseDAO1">
+	</bean>
+
+	<bean id="visitedUrlService" class="org.zjicm.crawler.service.impl.VisitedUrlService">
+		<property name="visitedUrlDao">
+			<ref bean="visitedUrlDao" />
+		</property>
+	</bean>
+
+
+	<bean id="visitedUrlAction" class="org.zjicm.crawler.action.VisitedUrlAction">
+		<property name="visitedUrlService">
+			<ref bean="visitedUrlService" />
+		</property>
+	</bean>
+
+	<bean id="taskInfoDao" class="org.zjicm.crawler.dao.impl.TaskInfoDao"
+		parent="baseDAO1">
+	</bean>
+	<bean id="Taskinfo" class="org.zjicm.crawler.vo.Taskinfo"></bean>
+
+	<bean id="taskInfoService" class="org.zjicm.crawler.service.impl.TaskInfoService">
+		<property name="taskInfoDao">
+			<ref bean="taskInfoDao" />
+		</property>
+	</bean>
+
+	<bean id="taskInfoAction" class="org.zjicm.crawler.action.TaskInfoAction">
+		<property name="taskInfoService">
+			<ref bean="taskInfoService" />
+		</property>
+	</bean>
+
+	<bean id="gatherWebSiteDao" class="org.zjicm.crawler.dao.impl.GatherWebSiteDao"
+		parent="baseDAO1">
+	</bean>
+
+	<bean id="gatherWebSiteService" class="org.zjicm.crawler.service.impl.GatherWebSiteService">
+		<property name="gatherWebWiteDao">
+			<ref bean="gatherWebSiteDao" />
+		</property>
+	</bean>
+
+	<bean id="gatherWebSiteAction" class="org.zjicm.crawler.action.GatherWebSiteAction">
+		<property name="gatherWebSiteService">
+			<ref bean="gatherWebSiteService" />
+		</property>
+	</bean>
+
+
+	<bean id="userDao" class="org.zjicm.crawler.dao.impl.UserDao"
+		parent="baseDAO1">
+	</bean>
+
+	<bean id="userService" class="org.zjicm.crawler.service.impl.UserService">
+		<property name="userDao">
+			<ref bean="userDao" />
+		</property>
+	</bean>
+
+	<bean id="userAction" class="org.zjicm.crawler.action.UserAction">
+		<property name="userService">
+			<ref bean="userService" />
+		</property>
+	</bean>
+
+
+
+	<bean id="controlDao" class="org.zjicm.crawler.dao.impl.ControlDao"
+		parent="baseDAO1">
+	</bean>
+
+	<bean id="controlService" class="org.zjicm.crawler.service.impl.ControlService">
+		<property name="controlDao">
+			<ref bean="controlDao" />
+		</property>
+	</bean>
+
+	<bean id="controlAction" class="org.zjicm.crawler.action.ControlAction">
+		<property name="controlService">
+			<ref bean="controlService" />
+		</property>
+	</bean>
+
+
+
+
+
+
+
+
+
+
+
+
+	<bean id="searchResultDao" class="org.zjicm.crawler.dao.impl.SearchResultDao"
+		parent="baseDAO2">
+	</bean>
+
+	<bean id="searchResultService" class="org.zjicm.crawler.service.impl.SearchResultService">
+		<property name="searchResultDao">
+			<ref bean="searchResultDao" />
+		</property>
+	</bean>
+
+	<bean id="searchResultAction" class="org.zjicm.crawler.action.SearchResultAction">
+		<property name="searchResultService">
+			<ref bean="searchResultService" />
+		</property>
+	</bean>
+
+
+
+
+	<bean id="luceneServerDao" class="org.zjicm.crawler.dao.impl.LuceneServerDao"
+		parent="baseDAO2">
+	</bean>
+
+	<bean id="luceneServerService" class="org.zjicm.crawler.service.impl.LuceneServerService">
+		<property name="luceneServerDao">
+			<ref bean="luceneServerDao" />
+		</property>
+	</bean>
+
+	<bean id="luceneServerAction" class="org.zjicm.crawler.action.LuceneServerAction">
+		<property name="luceneServerService">
+			<ref bean="luceneServerService" />
+		</property>
+	</bean>
+
+
+
+
+
+</beans>

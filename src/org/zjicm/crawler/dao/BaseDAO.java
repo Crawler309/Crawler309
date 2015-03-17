@@ -1,0 +1,23 @@
+package org.zjicm.crawler.dao;
+
+import org.hibernate.SessionFactory;
+import org.hibernate.classic.Session;
+
+public class BaseDAO {
+	private SessionFactory sessionFactory;
+
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	public Session getSession() {
+
+		Session session = sessionFactory.openSession();
+		return session;
+
+	}
+}

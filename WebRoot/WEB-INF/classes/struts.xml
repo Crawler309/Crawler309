@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE struts PUBLIC
+         "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+         "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+
+	<package name="default" extends="struts-default">
+
+		<!-- 定义一个拦截器 -->
+		<interceptors>
+			<interceptor name="loginInterceptor"
+				class="org.zjicm.crawler.interceptor.LoginInterceptor">
+			</interceptor>
+		</interceptors>
+		<default-interceptor-ref name="loginInterceptor"></default-interceptor-ref>
+
+		<!-- 定义全局Result -->
+		<global-results>
+
+			<result name="error" type="redirect">/user_login.jsp</result>
+
+		</global-results>
+
+
+
+
+		<action name="index_left" class="org.zjicm.crawler.action.IndexAction"
+			method="left">
+			<result name="success">/left.jsp</result>
+
+			<interceptor-ref name="loginInterceptor" />
+			<interceptor-ref name="defaultStack" />
+		</action>
+
+		<action name="index_top" class="org.zjicm.crawler.action.IndexAction"
+			method="top">
+			<result name="success">/top.jsp</result>
+			<interceptor-ref name="loginInterceptor" />
+			<interceptor-ref name="defaultStack" />
+		</action>
+
+		<action name="index" class="org.zjicm.crawler.action.IndexAction"
+			method="index">
+			<result name="success">/index.jsp</result>
+			<interceptor-ref name="loginInterceptor" />
+			<interceptor-ref name="defaultStack" />
+		</action>
+
+
+
+
+
+
+
+
+
+
+
+		<action name="TaskInfo_*" class="org.zjicm.crawler.action.TaskInfoAction"
+			method="{1}">
+			<result name="success">/taskinfo_{1}.jsp</result>
+			<result name="success_save" type="redirectAction">TaskInfo_get</result>
+			<result name="success_update" type="redirectAction">TaskInfo_get</result>
+			<result name="success_remove" type="redirectAction">TaskInfo_get</result>
+			<interceptor-ref name="loginInterceptor" />
+			<interceptor-ref name="defaultStack" />
+		</action>
+
+
+
+		<action name="GatherWebSite_*" class="org.zjicm.crawler.action.GatherWebSiteAction"
+			method="{1}">
+			<result name="success">/gatherwebsite_{1}.jsp</result>
+			<result name="success_save" type="redirectAction">TaskInfo_get</result>
+			<result name="success_update" type="redirectAction">GatherWebSite_get?taskId=${taskId}
+			</result>
+
+			<result name="success_remove" type="redirectAction">GatherWebSite_get?taskId=${taskId}
+			</result>
+
+			<interceptor-ref name="loginInterceptor" />
+			<interceptor-ref name="defaultStack" />
+		</action>
+
+		<action name="User_*" class="org.zjicm.crawler.action.UserAction"
+			method="{1}">
+
+			<result name="success_getById">/user_getById.jsp</result>
+			<result name="success_login" type="redirectAction">index</result>
+
+			<result name="success_logout" type="redirect">/user_login.jsp</result>
+			<result name="login_error">/user_login.jsp</result>
+			<interceptor-ref name="loginInterceptor" />
+			<interceptor-ref name="defaultStack" />
+		</action>
+
+
+
+		<action name="Search_*" class="org.zjicm.crawler.action.SearchResultAction"
+			method="{1}">
+			<result name="success">/search_{1}.jsp</result>
+			<interceptor-ref name="loginInterceptor" />
+			<interceptor-ref name="defaultStack" />
+		</action>
+
+		<action name="VisitedUrl_*" class="org.zjicm.crawler.action.VisitedUrlAction"
+			method="{1}">
+			<result name="success">/visitedurl_{1}.jsp</result>
+			<interceptor-ref name="loginInterceptor" />
+			<interceptor-ref name="defaultStack" />
+		</action>
+
+		<action name="UnVisitedUrl_*" class="org.zjicm.crawler.action.UnVisitedUrlAction"
+			method="{1}">
+			<result name="success">/unvisitedurl_{1}.jsp</result>
+			<interceptor-ref name="loginInterceptor" />
+			<interceptor-ref name="defaultStack" />
+		</action>
+
+		<action name="WebContInfo_*" class="org.zjicm.crawler.action.WebContInfoAction"
+			method="{1}">
+			<result name="success">/webcontinfo_{1}.jsp</result>
+			<interceptor-ref name="loginInterceptor" />
+			<interceptor-ref name="defaultStack" />
+		</action>
+
+
+
+		<action name="Control_*" class="org.zjicm.crawler.action.ControlAction"
+			method="{1}">
+			<result name="truncate">
+				control.jsp</result>
+			<result name="success_get">
+				control.jsp</result>
+			<result name="{1}_success" type="redirectAction">
+				index.action
+			</result>
+			<interceptor-ref name="loginInterceptor" />
+			<interceptor-ref name="defaultStack" />
+
+		</action>
+		
+		
+		
+		
+		<action name="LuceneServer_*" class="org.zjicm.crawler.action.LuceneServerAction"
+			method="{1}">
+			<result name="success">
+				luceneserver_get.jsp</result>
+			
+			<interceptor-ref name="loginInterceptor" />
+			<interceptor-ref name="defaultStack" />
+
+		</action>
+
+	</package>
+
+
+</struts>
